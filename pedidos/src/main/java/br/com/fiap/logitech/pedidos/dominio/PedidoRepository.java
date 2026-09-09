@@ -1,12 +1,13 @@
 package br.com.fiap.logitech.pedidos.dominio;
 
-import br.com.fiap.logitech.pedidos.dominio.Pedido;
+import java.util.List;
+import java.util.Optional;
 
 public interface PedidoRepository {
+
     Pedido salvar(Pedido pedido);
 
-    Pedido porId(Long id);
+    Optional<Pedido> porId(String id);
 
     List<Pedido> todos();
-
 }

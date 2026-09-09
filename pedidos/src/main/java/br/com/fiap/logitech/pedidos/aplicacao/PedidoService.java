@@ -3,13 +3,14 @@ package br.com.fiap.logitech.pedidos.aplicacao;
 import br.com.fiap.logitech.pedidos.dominio.NovoPedido;
 import br.com.fiap.logitech.pedidos.dominio.Pedido;
 import br.com.fiap.logitech.pedidos.dominio.SolicitacaoFatura;
+import br.com.fiap.logitech.pedidos.dominio.PedidoRepository;
 import br.com.fiap.logitech.pedidos.faturamento.ClienteFaturamento;
 import br.com.fiap.logitech.pedidos.faturamento.ConectorBoleto;
 import br.com.fiap.logitech.pedidos.faturamento.ConectorCartaoCorporativo;
 import br.com.fiap.logitech.pedidos.faturamento.ConectorFaturamento;
 import br.com.fiap.logitech.pedidos.faturamento.ConectorNaoEncontradoException;
 import br.com.fiap.logitech.pedidos.faturamento.FaturamentoIndisponivelException;
-import br.com.fiap.logitech.pedidos.infra.JpaPedidoRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
