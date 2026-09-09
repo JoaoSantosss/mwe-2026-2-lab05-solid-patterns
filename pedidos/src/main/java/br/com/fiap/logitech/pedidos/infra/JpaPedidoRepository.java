@@ -20,7 +20,7 @@ import java.util.Optional;
  * esse truque some, e é justamente esse o ponto.</p>
  */
 @Repository
-public class JpaPedidoRepository {
+public class JpaPedidoRepository implements PedidoRepository {
 
     private final PedidoJpa jpa;
 

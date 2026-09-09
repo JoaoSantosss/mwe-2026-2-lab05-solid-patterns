@@ -49,12 +49,12 @@ public class PedidoService {
     private static final Logger log = LoggerFactory.getLogger(PedidoService.class);
 
     // TODO-1: tipo concreto. Deveria ser a abstração PedidoRepository.
-    private final JpaPedidoRepository repositorio;
+    private final PedidoRepository repositorio;
     private final ClienteFaturamento clienteFaturamento;
 
     // TODO-1 e TODO-2: o construtor recebe a implementação concreta do
     // repositório e não recebe a fábrica de conectores. Os dois mudam.
-    public PedidoService(JpaPedidoRepository repositorio, ClienteFaturamento clienteFaturamento) {
+    public PedidoService(PedidoRepository repositorio, ClienteFaturamento clienteFaturamento) {
         this.repositorio = repositorio;
         this.clienteFaturamento = clienteFaturamento;
     }
