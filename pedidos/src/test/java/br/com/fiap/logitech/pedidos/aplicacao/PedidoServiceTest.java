@@ -2,6 +2,7 @@ package br.com.fiap.logitech.pedidos.aplicacao;
 
 import br.com.fiap.logitech.pedidos.dominio.NovoPedido;
 import br.com.fiap.logitech.pedidos.dominio.Pedido;
+import br.com.fiap.logitech.pedidos.dominio.PedidoRepository;
 import br.com.fiap.logitech.pedidos.dominio.SolicitacaoFatura;
 import br.com.fiap.logitech.pedidos.dominio.StatusPedido;
 import br.com.fiap.logitech.pedidos.faturamento.ClienteFaturamento;
@@ -45,13 +46,9 @@ class PedidoServiceTest {
      * {@code infra}. Os testes continuam passando, e agora o teste não sabe
      * mais que existe um ORM no projeto.</p>
      */
-    static class RepositorioEmMemoria extends JpaPedidoRepository {
+    static class RepositorioEmMemoria implements PedidoRepository {
 
         private final Map<String, Pedido> dados = new LinkedHashMap<>();
-
-        RepositorioEmMemoria() {
-            super(null);
-        }
 
         @Override
         public Pedido salvar(Pedido pedido) {
