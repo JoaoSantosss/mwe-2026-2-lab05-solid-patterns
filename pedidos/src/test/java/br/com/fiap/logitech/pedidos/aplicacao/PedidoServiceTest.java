@@ -6,6 +6,9 @@ import br.com.fiap.logitech.pedidos.dominio.PedidoRepository;
 import br.com.fiap.logitech.pedidos.dominio.SolicitacaoFatura;
 import br.com.fiap.logitech.pedidos.dominio.StatusPedido;
 import br.com.fiap.logitech.pedidos.faturamento.ClienteFaturamento;
+import br.com.fiap.logitech.pedidos.faturamento.ConectorBoleto;
+import br.com.fiap.logitech.pedidos.faturamento.ConectorCartaoCorporativo;
+import br.com.fiap.logitech.pedidos.faturamento.ConectorFaturamentoFactory;
 import br.com.fiap.logitech.pedidos.faturamento.ConectorNaoEncontradoException;
 import br.com.fiap.logitech.pedidos.faturamento.FaturamentoIndisponivelException;
 import br.com.fiap.logitech.pedidos.infra.JpaPedidoRepository;
@@ -94,10 +97,9 @@ class PedidoServiceTest {
         faturamento = new FaturamentoFalso();
         // TODO-2: quando a fábrica de conectores existir, ela é construída aqui
         // com a lista de conectores e passada ao serviço:
-        //   var fabrica = new ConectorFaturamentoFactory(List.of(
-        //           new ConectorBoleto(), new ConectorCartaoCorporativo()));
-        //   servico = new PedidoService(repositorio, faturamento, fabrica);
-        servico = new PedidoService(repositorio, faturamento);
+        var fabrica = new ConectorFaturamentoFactory(List.of(
+        new ConectorBoleto(), new ConectorCartaoCorporativo()));
+        servico = new PedidoService(repositorio, faturamento, fabrica);
     }
 
     private NovoPedido novoPedido(String tipoCliente) {

@@ -5,10 +5,8 @@ import br.com.fiap.logitech.pedidos.dominio.Pedido;
 import br.com.fiap.logitech.pedidos.dominio.SolicitacaoFatura;
 import br.com.fiap.logitech.pedidos.dominio.PedidoRepository;
 import br.com.fiap.logitech.pedidos.faturamento.ClienteFaturamento;
-import br.com.fiap.logitech.pedidos.faturamento.ConectorBoleto;
-import br.com.fiap.logitech.pedidos.faturamento.ConectorCartaoCorporativo;
 import br.com.fiap.logitech.pedidos.faturamento.ConectorFaturamento;
-import br.com.fiap.logitech.pedidos.faturamento.ConectorNaoEncontradoException;
+import br.com.fiap.logitech.pedidos.faturamento.ConectorFaturamentoFactory;
 import br.com.fiap.logitech.pedidos.faturamento.FaturamentoIndisponivelException;
 
 import org.slf4j.Logger;
@@ -52,12 +50,14 @@ public class PedidoService {
     // TODO-1: tipo concreto. Deveria ser a abstração PedidoRepository.
     private final PedidoRepository repositorio;
     private final ClienteFaturamento clienteFaturamento;
+    private final ConectorFaturamentoFactory conectorFaturamentoFactory;
 
     // TODO-1 e TODO-2: o construtor recebe a implementação concreta do
     // repositório e não recebe a fábrica de conectores. Os dois mudam.
-    public PedidoService(PedidoRepository repositorio, ClienteFaturamento clienteFaturamento) {
+    public PedidoService(PedidoRepository repositorio, ClienteFaturamento clienteFaturamento, ConectorFaturamentoFactory conectorFaturamentoFactory) {
         this.repositorio = repositorio;
         this.clienteFaturamento = clienteFaturamento;
+        this.conectorFaturamentoFactory = conectorFaturamentoFactory;
     }
 
     /**
@@ -72,7 +72,7 @@ public class PedidoService {
         Pedido pedido = new Pedido(novo.cliente(), novo.tipoCliente(), novo.origem(),
                 novo.destino(), novo.enderecoEntrega(), novo.pesoKg(), novo.valor());
 
-        ConectorFaturamento conector = escolherConector(pedido.getTipoCliente());
+        ConectorFaturamento conector = conectorFaturamentoFactory.para(pedido.getTipoCliente());
         SolicitacaoFatura solicitacao = conector.montar(pedido);
 
         try {
@@ -84,19 +84,6 @@ public class PedidoService {
         }
 
         return repositorio.salvar(pedido);
-    }
-
-    // TODO-2 e TODO-3: este método privado é o problema. Cada contrato novo do
-    // comercial vira mais um "else if" aqui dentro, num arquivo que não deveria
-    // ter motivo nenhum para mudar por causa disso.
-    private ConectorFaturamento escolherConector(String tipoCliente) {
-        if (ConectorBoleto.TIPO_CLIENTE.equals(tipoCliente)) {
-            return new ConectorBoleto();
-        }
-        if (ConectorCartaoCorporativo.TIPO_CLIENTE.equals(tipoCliente)) {
-            return new ConectorCartaoCorporativo();
-        }
-        throw new ConectorNaoEncontradoException(tipoCliente);
     }
 
     @Transactional(readOnly = true)
