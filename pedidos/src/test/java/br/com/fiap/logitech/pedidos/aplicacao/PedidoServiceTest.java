@@ -8,6 +8,7 @@ import br.com.fiap.logitech.pedidos.dominio.StatusPedido;
 import br.com.fiap.logitech.pedidos.faturamento.ClienteFaturamento;
 import br.com.fiap.logitech.pedidos.faturamento.ConectorBoleto;
 import br.com.fiap.logitech.pedidos.faturamento.ConectorCartaoCorporativo;
+import br.com.fiap.logitech.pedidos.faturamento.ConectorFaturaMensal;
 import br.com.fiap.logitech.pedidos.faturamento.ConectorFaturamentoFactory;
 import br.com.fiap.logitech.pedidos.faturamento.ConectorNaoEncontradoException;
 import br.com.fiap.logitech.pedidos.faturamento.FaturamentoIndisponivelException;
@@ -98,7 +99,7 @@ class PedidoServiceTest {
         // TODO-2: quando a fábrica de conectores existir, ela é construída aqui
         // com a lista de conectores e passada ao serviço:
         var fabrica = new ConectorFaturamentoFactory(List.of(
-        new ConectorBoleto(), new ConectorCartaoCorporativo()));
+        new ConectorBoleto(), new ConectorCartaoCorporativo(), new ConectorFaturaMensal()));
         servico = new PedidoService(repositorio, faturamento, fabrica);
     }
 
@@ -165,4 +166,12 @@ class PedidoServiceTest {
     // Um pedido de cliente CONTRATO precisa ser faturado com meio de pagamento
     // FATURA_MENSAL, e isso tem que passar a funcionar SEM que uma linha sequer
     // de PedidoService seja alterada. Use `git diff` para conferir.
+    @Test
+    @DisplayName("cliente CONTRATO: pedido é faturado por fatura mensal")
+    void clienteContratoFaturaMensal() {
+        servico.criar(novoPedido("CONTRATO"));
+
+        assertEquals("FATURA_MENSAL", faturamento.ultimaSolicitacao.meioPagamento());
+        assertEquals(0, new BigDecimal("1000.00").compareTo(faturamento.ultimaSolicitacao.valor()));
+    }
 }
