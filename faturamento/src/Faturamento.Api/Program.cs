@@ -25,6 +25,7 @@ builder.Services.AddDbContext<FaturamentoDbContext>(opcoes =>
 //   builder.Services.AddScoped<IFaturaRepository, EfFaturaRepository>();
 builder.Services.AddScoped<EfFaturaRepository>();
 builder.Services.AddScoped<FaturaService>();
+builder.Services.AddScoped<IFaturaRepository, EfFaturaRepository>();
 
 var app = builder.Build();
 
