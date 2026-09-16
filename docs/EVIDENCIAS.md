@@ -31,11 +31,9 @@ prova. Se o teste passou de primeira, ele não está concorrente de verdade:
 confira se são 100 chamadas e se elas partem juntas.
 
 ```
-NOTAS_DUPLICADAS_ANTES: Assert.Equal() Failure: Values differ
-Expected: 0
-Actual:   7
+NOTAS_DUPLICADAS_ANTES: 7
 
-NOTAS_DUPLICADAS_DEPOIS: Passed!  - Failed:     0, Passed:    10, Skipped:     0, Total:    10, Duration: 114 ms
+NOTAS_DUPLICADAS_DEPOIS: 0
 ```
 
 ---
@@ -52,9 +50,9 @@ o esqueleto já trazia mais os testes que as lacunas pedem: os do cliente
 CONTRATO (TODO-3) e o de concorrência (TODO-6).
 
 ```
-TESTES_JAVA: PREENCHER
-TESTES_CSHARP: PREENCHER
-```
+TESTES_JAVA: 15
+
+TESTES_CSHARP: 10
 
 ---
 
@@ -71,7 +69,7 @@ curl -s -X POST http://localhost:8080/api/v1/pedidos \
        "enderecoEntrega":"Rua das Araucárias, 480",
        "pesoKg":120.0,"valor":1000.00}'
 
-curl -s http://localhost:5080/api/v1/faturas/COLE_O_ID_AQUI
+curl -s http://localhost:5080/api/v1/faturas/825ad89c-f3c4-470c-8a34-36783e98c10e
 ```
 
 Registre o `id` devolvido pelo POST e o `numeroNotaFiscal` que apareceu nas
@@ -79,8 +77,8 @@ duas respostas. Se o pedido voltar com status `AGUARDANDO_FATURAMENTO`, o
 serviço de Faturamento não foi alcançado: confira `LOGITECH_FATURAMENTO_URL`.
 
 ```
-PEDIDO_ID: PREENCHER
-NUMERO_NOTA_FISCAL: PREENCHER
+PEDIDO_ID: 825ad89c-f3c4-470c-8a34-36783e98c10e
+NUMERO_NOTA_FISCAL: NF-000002
 ```
 
 ---
@@ -91,5 +89,5 @@ Não entra na verificação automática, e é o que permite comparar números en
 duplas: Codespaces ou máquina local, e quantos núcleos.
 
 ```
-AMBIENTE: PREENCHER
+AMBIENTE: devcontainer do laboratório (imagem linux/amd64) sobre macOS arm64, 10 núcleos disponíveis ao container, Java 21.0.8, Maven 3.9.9, .NET SDK 8.0.425
 ```
