@@ -1,6 +1,8 @@
 using System.Collections.Concurrent;
 using Faturamento.Api.Dominio;
 using Xunit;
+using Faturamento.Api.Aplicacao;
+using Faturamento.Api.Infraestrutura;
 
 namespace Faturamento.Tests;
 
@@ -73,4 +75,23 @@ public class NumeradorNotaFiscalTests
     //
     // Deixe o `using System.Collections.Concurrent;` do topo do arquivo: ele já
     // está aqui para você usar a ConcurrentBag.
+
+    [Fact]
+    public async Task CemEmissoesConcorrentesNaoGeramNumeroRepetido()
+    {
+        NumeradorNotaFiscal numerador = NumeradorNotaFiscal.Instancia;
+        numerador.ReiniciarParaTeste();
+
+        var numeros = new ConcurrentBag<string>();
+
+        IEnumerable<Task> emissoes = Enumerable.Range(0, 100)
+            .Select(_ => Task.Run(() => numeros.Add(numerador.Proximo())));
+
+        await Task.WhenAll(emissoes);
+
+        int duplicadas = numeros.Count - numeros.Distinct().Count();
+
+        Assert.Equal(100, numeros.Count);
+        Assert.Equal(0, duplicadas);
+    }
 }
