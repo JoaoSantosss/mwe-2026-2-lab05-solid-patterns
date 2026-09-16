@@ -42,7 +42,7 @@ namespace Faturamento.Api.Dominio;
 public sealed class NumeradorNotaFiscal
 {
     // TODO-5: criação da instância sem sincronização nenhuma.
-    private static NumeradorNotaFiscal? _instancia;
+    private static readonly Lazy<NumeradorNotaFiscal> _instancia = new Lazy<NumeradorNotaFiscal>(() => new NumeradorNotaFiscal());
 
     private int _ultimo;
 
@@ -50,17 +50,12 @@ public sealed class NumeradorNotaFiscal
     {
     }
 
-    public static NumeradorNotaFiscal Instancia => _instancia ??= new NumeradorNotaFiscal();
+    public static NumeradorNotaFiscal Instancia => _instancia.Value;
 
     /// <summary>Devolve o próximo número de nota fiscal, no formato NF-000001.</summary>
     public string Proximo()
     {
-        // TODO-5: ler, somar e gravar em três passos separados é o que permite
-        // duas threads devolverem o mesmo número.
-        int atual = _ultimo;
-        Thread.Yield();
-        atual = atual + 1;
-        _ultimo = atual;
+        int atual = Interlocked.Increment(ref _ultimo);
 
         return $"NF-{atual:D6}";
     }

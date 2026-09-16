@@ -31,8 +31,11 @@ prova. Se o teste passou de primeira, ele não está concorrente de verdade:
 confira se são 100 chamadas e se elas partem juntas.
 
 ```
-NOTAS_DUPLICADAS_ANTES: PREENCHER
-NOTAS_DUPLICADAS_DEPOIS: PREENCHER
+NOTAS_DUPLICADAS_ANTES: Assert.Equal() Failure: Values differ
+Expected: 0
+Actual:   7
+
+NOTAS_DUPLICADAS_DEPOIS: Passed!  - Failed:     0, Passed:    10, Skipped:     0, Total:    10, Duration: 114 ms
 ```
 
 ---
